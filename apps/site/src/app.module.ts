@@ -7,6 +7,8 @@ import { UsersModule } from './users/users.module';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { Employee } from './employee/entities/employee.entity';
 import { EmployeeModule } from './employee/employee.module';
+import { Activities } from './activities/entities/activities.entity';
+import { ActivitiesModule } from './activities/activities.module';
 import { RequestModule } from './request/request.module';
 import { Request } from './request/entities/request.entity';
 
@@ -25,7 +27,7 @@ import { Request } from './request/entities/request.entity';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
-        entities: [User, Employee, Request],
+        entities: [User, Employee, Activities, Request],
         // synchronize: config.get('NODE_ENV') !== 'production',
         synchronize: true,
         schema: 'site',
@@ -35,6 +37,7 @@ import { Request } from './request/entities/request.entity';
     AuthModule,
     UsersModule,
     EmployeeModule,
+    ActivitiesModule,,
     RequestModule,
   ],
 })

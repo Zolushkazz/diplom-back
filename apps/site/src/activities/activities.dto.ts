@@ -1,47 +1,85 @@
-import { IsString, IsOptional, IsArray, IsDateString, IsNotEmpty } from 'class-validator';
+// activities.dto.ts
+import { Type } from 'class-transformer';
+import {
+  IsString,
+  IsNotEmpty,
+  IsOptional,
+  IsDate,
+  IsDateString,
+  IsArray,
+  ValidateNested,
+} from 'class-validator';
 
 export class CreateActivitiesDto {
   @IsString()
+  @IsOptional()
+  authorId: string;
+
+  @IsString()
+  @IsOptional()
   activityName: string;
 
   @IsString()
+  @IsOptional()
   activityType: string;
 
   @IsString()
+  @IsOptional()
   department: string;
 
-  @IsOptional()
   @IsString()
-  status?: string;
-
   @IsOptional()
+  status: string;
+
   @IsDateString()
-  startDate?: string; // ISO format date (e.g., 2025-04-28)
-
   @IsOptional()
-  startTime?: string; // ISO format time (e.g., 14:30:00)
+  startDate: Date;
 
   @IsOptional()
   @IsString()
-  district?: string;
+  startTime: string;
+
+  @IsOptional()
+  @IsString()
+  endTime: string;
+
+  @IsString()
+  @IsOptional()
+  district: string;
+
+  @IsString()
+  @IsOptional()
+  lat: string;
+
+  @IsString()
+  @IsOptional()
+  lng: string;
 
   @IsOptional()
   @IsArray()
-  @IsString({ each: true })
-  participant?: string[];
+  @ValidateNested({ each: true })
+  @Type(() => ParticipantDto)
+  participant: ParticipantDto[];
 
-  @IsOptional()
   @IsString()
-  notes?: string;
-
   @IsOptional()
+  notes: string;
+
   @IsString()
-  decision?: string;
-
   @IsOptional()
+  decision: string;
+
   @IsArray()
-  @IsString({ each: true })
-  file?: string[];
+  @IsOptional()
+  file: string[];
+
+  @IsDate()
+  @IsOptional()
+  createdAt: Date;
+
+  @IsDate()
+  @IsOptional()
+  updatedAt: Date;
 }
 
 export class UpdateActivitiesDto extends CreateActivitiesDto {
@@ -50,20 +88,43 @@ export class UpdateActivitiesDto extends CreateActivitiesDto {
 }
 
 export class ActivitiesResponseDto {
-    id: number;
-    activityName: string;
-    activityType: string;
-    department: string;
-    createdAt: Date;
-    updatedAt: Date;
-    status?: string;
-    startDate?: string;
-    startTime?: string;
-    district?: string;
-    participant?: string[];
-    notes?: string;
-    decision?: string;
-    file?: string[];
-    isVerified: boolean;
-  }
-  
+  id: number;
+  authorId: string;
+  activityName: string;
+  activityType: string;
+  department: string;
+  status: string;
+  startDate: Date;
+  startTime: string;
+  endTime: string;
+  district: string;
+  lat: string;
+  lng: string;
+  participant: ParticipantDto[];
+  notes: string;
+  decision: string;
+  file: string[];
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+class ParticipantDto {
+  @IsString()
+  firstName: string;
+
+  @IsString()
+  lastName: string;
+
+  @IsString()
+  phone: string;
+
+  @IsString()
+  email: string;
+
+  @IsString()
+  address: string;
+
+  @IsOptional()
+  @IsString()
+  image?: string;
+}

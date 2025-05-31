@@ -37,7 +37,7 @@ import { Request } from './request/entities/request.entity';
     AuthModule,
     UsersModule,
     EmployeeModule,
-    ActivitiesModule,,
+    ActivitiesModule,
     RequestModule,
   ],
 })

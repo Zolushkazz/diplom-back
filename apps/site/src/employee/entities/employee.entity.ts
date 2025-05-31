@@ -19,6 +19,9 @@ export class Employee {
   @Column()
   name: string;
 
+  @Column({ nullable: true })
+  image: string;
+
   @Column()
   lastName: string;
 

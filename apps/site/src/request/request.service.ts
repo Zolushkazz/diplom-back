@@ -1,5 +1,5 @@
-import { Injectable } from '@nestjs/common';
-import { CreateRequestDto, RequestResponseDto, UpdateRequestDto } from './request.dto';
+import { Injectable, NotFoundException } from '@nestjs/common';
+import { CreateRequestDto, RequestResponseDto, ShiftOrderDto, UpdateRequestDto } from './request.dto';
 import { Request } from './entities/request.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -44,10 +44,32 @@ export class RequestService {
         .getMany();
       return employees.map(this.toResponseDto);
     }
+
+// service
+    async shiftReq(dto: ShiftOrderDto): Promise<RequestResponseDto> {
+  const { shiftId, receiverName } = dto;
+
+  const shift = await this.requetsRepository.findOne({
+    where: { id: shiftId },
+  });
+
+  if (!shift) {
+    throw new NotFoundException('Shift not found');
+  }
+
+  if (receiverName !== undefined) {
+    shift.receiverName = receiverName;
+  }
+
+  const updated = await this.requetsRepository.save(shift);
+  return this.toResponseDto(updated);
+}
+
+
   
   private toResponseDto(request: Request): RequestResponseDto {
     if (!request) return null;
-    const { id, name, notes, startDate, createdAt, updatedAt} = request;
-    return { id, name, notes, startDate, createdAt, updatedAt };
+    const { id, name, notes, startDate, receiverName, createdAt, updatedAt} = request;
+    return { id, name, notes, startDate, receiverName, createdAt, updatedAt };
   }
 }

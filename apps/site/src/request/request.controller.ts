@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Delete, Put } from '@nestjs/common';
 import { RequestService } from './request.service';
-import { CreateRequestDto, RequestResponseDto, UpdateRequestDto } from './request.dto';
+import { CreateRequestDto, RequestResponseDto, UpdateRequestDto, ShiftOrderDto } from './request.dto';
 
 @Controller('request')
 export class RequestController {
@@ -25,6 +25,11 @@ export class RequestController {
     async update( @Param('id') id: number, @Body() updateRequestDto: UpdateRequestDto): Promise<RequestResponseDto> {
       return this.requestService.update(id, updateRequestDto);
     }
+
+  @Post('/shift')
+  async shiftOrder(@Body() dto: ShiftOrderDto): Promise<RequestResponseDto> {
+    return await this.requestService.shiftReq(dto);
+  }
 
   @Delete(':id')
   remove(@Param('id') id: string) {

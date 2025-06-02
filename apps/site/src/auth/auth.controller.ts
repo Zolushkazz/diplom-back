@@ -10,10 +10,13 @@ export class AuthController {
   @Post('login')
   async login(
     @Body() loginDto: LoginDto,
-    @Res({ passthrough: true }) res: Response
+    @Res({ passthrough: true }) res: Response,
   ) {
-    const { accessToken } = await this.authService.signIn(loginDto.username, loginDto.password);
-    
+    const { accessToken } = await this.authService.signIn(
+      loginDto.username,
+      loginDto.password,
+    );
+
     res.cookie('access_token', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -28,14 +31,14 @@ export class AuthController {
   @Post('signup')
   async register(
     @Body() signUpDto: CreateUserDto,
-    @Res({ passthrough: true }) res: Response
+    @Res({ passthrough: true }) res: Response,
   ) {
     const { accessToken } = await this.authService.signUp(
       signUpDto.username,
       signUpDto.password,
-      signUpDto.email
+      signUpDto.email,
     );
-    
+
     res.cookie('access_token', accessToken, {
       httpOnly: true,
       secure: process.env.NODE_ENV === 'production',
@@ -44,7 +47,10 @@ export class AuthController {
       path: '/',
     });
 
-    return { message: 'Registration successful' };
+    return {
+      message: 'Registration successful',
+      accessToken,
+    };
   }
 
   @Post('logout')

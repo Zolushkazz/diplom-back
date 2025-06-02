@@ -1,4 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { User } from '../../users/entities/users.entity';
 
 @Entity({schema:'site'})
 export class Request {
@@ -13,6 +14,15 @@ export class Request {
 
   @Column({ nullable: true })
   notes: string;
+
+
+  @ManyToOne(() => User)
+@JoinColumn({ name: 'receiverName' })
+receiver: User;
+
+
+   @Column({ nullable: true })
+  receiverName?: string;
 
   @CreateDateColumn({ type: 'timestamp' })
   createdAt: Date;

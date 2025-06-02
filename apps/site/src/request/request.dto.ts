@@ -26,6 +26,12 @@ export class RequestResponseDto {
   name: string;
   notes: string;
   startDate: string;
+  receiverName: string;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export class ShiftOrderDto {
+  shiftId: number;
+  receiverName?: string;
 }

@@ -8,11 +8,13 @@ import {
   ParseIntPipe,
   UseGuards,
   Request,
+  Req,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
 import { User } from './entities/users.entity';
 import { CreateUserDto } from './users.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RequestWithUser } from '../auth/request-with-user.interface';
 
 @Controller('users')
 export class UsersController {
@@ -24,10 +26,11 @@ export class UsersController {
     return this.usersService.findAll();
   }
 
-  @Get('profile')
   @UseGuards(JwtAuthGuard)
-  async getProfile(@Request() req: any): Promise<User> {
-    return this.usersService.findById(req.user.id);
+  @Get('profile')
+  async getProfile(@Req() req: RequestWithUser) {
+    const userId = req.user?.id; // JWT-ийн payload-оос ирэх userId
+    return this.usersService.findById(userId);
   }
 
   @Get(':id')

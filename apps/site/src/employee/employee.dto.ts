@@ -1,5 +1,14 @@
 import { Type } from 'class-transformer';
-import { IsDate, IsEmail, IsEnum, IsNotEmpty, IsOptional, IsPhoneNumber, IsString, MinLength } from 'class-validator';
+import {
+  IsDate,
+  IsEmail,
+  IsEnum,
+  IsNotEmpty,
+  IsOptional,
+  IsPhoneNumber,
+  IsString,
+  MinLength,
+} from 'class-validator';
 import { GenderEnum } from './entities/employee.entity';
 
 export class CreateEmployeeDto {
@@ -15,6 +24,10 @@ export class CreateEmployeeDto {
   @IsString()
   @IsNotEmpty()
   name: string;
+
+  @IsString()
+  @IsOptional()
+  image: string;
 
   @IsString()
   @IsNotEmpty()
@@ -78,6 +91,7 @@ export class EmployeeResponseDto {
   id: number;
   username: string;
   name: string;
+  image: string;
   lastName: string;
   department: string;
   role: string;

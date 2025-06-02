@@ -1,3 +1,4 @@
+// users.dto.ts
 import {
   IsString,
   IsEmail,
@@ -5,7 +6,10 @@ import {
   MaxLength,
   Matches,
   IsNotEmpty,
+  IsIn,
+  IsEnum,
 } from 'class-validator';
+import { UserRole } from './entities/users.entity';
 
 export class CreateUserDto {
   @IsString()
@@ -24,6 +28,11 @@ export class CreateUserDto {
     message: 'Том үсэг, жижиг үсэг, тоо болон тэмдэгтийг хамруулсан байх ёстой',
   })
   password: string;
+
+  @IsEnum(UserRole, {
+    message: 'Role нь зөвхөн ADMIN, ORGANIZER, PARTICIPANT байж болно',
+  })
+  role: UserRole;
 }
 
 export class LoginDto {

@@ -2,6 +2,7 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from '../users/users.service';
 import * as bcrypt from 'bcrypt';
+import { UserRole } from '../users/entities/users.entity';
 
 @Injectable()
 export class AuthService {
@@ -16,20 +17,25 @@ export class AuthService {
   ): Promise<{ accessToken: string }> {
     const user = await this.validateUser(username, password);
 
+    console.log('Bataa', user);
+
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
 
-    console.log(user);
+    console.log('BUldruu', user);
 
     const payload = {
       sub: user.id,
       username: user.username,
+      role: user.role,
       jti: this.generateTokenId(),
     };
 
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload, {
+        secret: process.env.JWT_SECRET || 'your-secret-key',
+      }),
     };
   }
 
@@ -37,6 +43,7 @@ export class AuthService {
     username: string,
     password: string,
     email: string,
+    role: UserRole,
   ): Promise<{ accessToken: string }> {
     const existingUser = await this.usersService.findByUsername(username);
     if (existingUser) {
@@ -47,6 +54,7 @@ export class AuthService {
 
     const user = await this.usersService.create({
       username,
+      role,
       password: hashedPassword,
       email,
     });
@@ -55,16 +63,21 @@ export class AuthService {
       sub: user.id,
       username: user.username,
       email: user.email,
+      role: user.role,
       jti: this.generateTokenId(),
     };
 
     return {
-      accessToken: this.jwtService.sign(payload),
+      accessToken: this.jwtService.sign(payload, {
+        secret: process.env.JWT_SECRET || 'your-secret-key',
+      }),
     };
   }
 
   private async validateUser(username: string, password: string): Promise<any> {
     const user = await this.usersService.findByUsername(username);
+
+    console.log('ascascu', user);
 
     if (user && (await bcrypt.compare(password, user.password))) {
       const { password, ...result } = user;
@@ -72,6 +85,7 @@ export class AuthService {
     }
     console.log(user);
     return {
+      role: user.role,
       username,
       password,
     };

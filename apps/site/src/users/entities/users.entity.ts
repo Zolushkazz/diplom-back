@@ -1,6 +1,18 @@
-import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn } from 'typeorm';
+// user.entitiy.ts
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  CreateDateColumn,
+} from 'typeorm';
 
-@Entity({schema: 'site'})
+export enum UserRole {
+  ADMIN = 'ADMIN',
+  ORGANIZER = 'ORGANIZER',
+  PARTICIPANT = 'PARTICIPANT',
+}
+
+@Entity({ schema: 'site' })
 export class User {
   @PrimaryGeneratedColumn()
   id: number;
@@ -8,8 +20,11 @@ export class User {
   @Column({ unique: true, length: 20 })
   username: string;
 
-  @Column({ length: 60 }) 
+  @Column({ length: 60 })
   password: string;
+
+  @Column({ type: 'enum', enum: UserRole, default: UserRole.PARTICIPANT })
+  role: UserRole;
 
   @CreateDateColumn()
   createdAt: Date;

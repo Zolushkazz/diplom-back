@@ -7,6 +7,7 @@ import {
   Delete,
   Param,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { EmployeeService } from './employee.service';
 import {
@@ -14,12 +15,17 @@ import {
   UpdateEmployeeDto,
   EmployeeResponseDto,
 } from './employee.dto';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
+import { Roles } from '../auth/roles.decorator';
 
 @Controller('employees')
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class EmployeeController {
   constructor(private readonly employeeService: EmployeeService) {}
 
   @Post()
+  @Roles('ADMIN')
   async create(
     @Body() createEmployeeDto: CreateEmployeeDto,
   ): Promise<EmployeeResponseDto> {

@@ -21,25 +21,16 @@ import {
 import { FilesInterceptor } from '@nestjs/platform-express';
 import { extname } from 'path';
 import { diskStorage } from 'multer';
+import { Roles } from '../auth/roles.decorator';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { RolesGuard } from '../auth/roles.guard';
 
 @Controller('activities')
+// @UseGuards(JwtAuthGuard, RolesGuard)
 export class ActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
   @Post()
-  @UseInterceptors(
-    FilesInterceptor('files', 10, {
-      storage: diskStorage({
-        destination: './uploads',
-        filename: (req, file, callback) => {
-          const uniqueSuffix =
-            Date.now() + '-' + Math.round(Math.random() * 1e9);
-          const ext = extname(file.originalname);
-          callback(null, `${file.fieldname}-${uniqueSuffix}${ext}`);
-        },
-      }),
-    }),
-  )
   async create(
     @Body() createActivityDto: CreateActivitiesDto,
     @UploadedFiles() files: Express.Multer.File[],
@@ -49,6 +40,7 @@ export class ActivitiesController {
   }
 
   @Get()
+  @Roles('AMDIN')
   async findAll(): Promise<ActivitiesResponseDto[]> {
     return this.activitiesService.findAll();
   }

@@ -26,11 +26,12 @@ import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 
 @Controller('activities')
-// @UseGuards(JwtAuthGuard, RolesGuard)
+@UseGuards(JwtAuthGuard, RolesGuard)
 export class ActivitiesController {
   constructor(private readonly activitiesService: ActivitiesService) {}
 
   @Post()
+  @Roles('ADMIN', 'ORGANIZER')
   async create(
     @Body() createActivityDto: CreateActivitiesDto,
     @UploadedFiles() files: Express.Multer.File[],
@@ -40,17 +41,19 @@ export class ActivitiesController {
   }
 
   @Get()
-  @Roles('AMDIN')
+  @Roles('ADMIN', 'ORGANIZER', 'PARTICIPANT')
   async findAll(): Promise<ActivitiesResponseDto[]> {
     return this.activitiesService.findAll();
   }
 
   @Get(':id')
+  @Roles('ADMIN', 'ORGANIZER')
   async findOne(@Param('id') id: number): Promise<ActivitiesResponseDto> {
     return this.activitiesService.findOne(+id);
   }
 
   @Put(':id')
+  @Roles('ADMIN', 'ORGANIZER')
   async update(
     @Param('id') id: number,
     @Body() updateActivityDto: UpdateActivitiesDto,
@@ -59,6 +62,7 @@ export class ActivitiesController {
   }
 
   @Delete(':id')
+  @Roles('ADMIN', 'ORGANIZER')
   async remove(@Param('id') id: number): Promise<void> {
     return this.activitiesService.remove(+id);
   }

@@ -19,19 +19,19 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @Get()
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async findAll(): Promise<User[]> {
     return this.usersService.findAll();
   }
 
   @Get('profile')
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async getProfile(@Request() req: any): Promise<User> {
     return this.usersService.findById(req.user.id);
   }
 
   @Get(':id')
-  // @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   async findOne(@Param('id', ParseIntPipe) id: number): Promise<User> {
     return this.usersService.findById(id);
   }

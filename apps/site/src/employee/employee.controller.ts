@@ -33,6 +33,7 @@ export class EmployeeController {
   }
 
   @Get()
+  @Roles('ADMIN', 'ORGANIZER', 'PARTICIPANT')
   async findAll(): Promise<EmployeeResponseDto[]> {
     return this.employeeService.findAll();
   }
@@ -43,11 +44,13 @@ export class EmployeeController {
   //   }
 
   @Get(':id')
+  @Roles('ADMIN', 'ORGANIZER', 'PARTICIPANT')
   async findOne(@Param('id') id: string): Promise<EmployeeResponseDto> {
     return this.employeeService.findOne(+id);
   }
 
   @Put(':id')
+  @Roles('ADMIN')
   async update(
     @Param('id') id: number,
     @Body() updateEmployeeDto: UpdateEmployeeDto,
@@ -56,6 +59,7 @@ export class EmployeeController {
   }
 
   @Delete(':id')
+  @Roles('ADMIN')
   async remove(@Param('id') id: string): Promise<void> {
     return this.employeeService.remove(+id);
   }

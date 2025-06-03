@@ -1,4 +1,4 @@
-import { IsNotEmpty, IsString, IsDateString, IsNumber } from 'class-validator';
+import { IsNotEmpty, IsString, IsDateString, IsNumber, IsOptional } from 'class-validator';
 
 export class CreateRequestDto { 
   @IsNotEmpty()
@@ -29,9 +29,26 @@ export class RequestResponseDto {
   receiverName: string;
   createdAt: Date;
   updatedAt: Date;
+  shift?: any
 }
 
 export class ShiftOrderDto {
+  @IsNumber()
   shiftId: number;
+
+  @IsOptional()
+  @IsString()
   receiverName?: string;
 }
+export class CloseShiftDto {
+  @IsNumber()
+  id: number;
+
+  @IsString()
+  state?: "cancelled" | "closed";
+
+  @IsOptional()
+  @IsString()
+  note: string
+}
+

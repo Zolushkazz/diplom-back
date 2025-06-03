@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Post, Delete, Put } from '@nestjs/common';
 import { RequestService } from './request.service';
-import { CreateRequestDto, RequestResponseDto, UpdateRequestDto, ShiftOrderDto } from './request.dto';
+import { CreateRequestDto, RequestResponseDto, UpdateRequestDto, ShiftOrderDto, CloseShiftDto } from './request.dto';
 
 @Controller('request')
 export class RequestController {
@@ -18,7 +18,7 @@ export class RequestController {
 
   @Get(':id')
   findOne(@Param('id') id: string) {
-    return this.requestService.findOne(+id);
+    return this.requestService.findOne(id);
   }
 
   @Put(':id')
@@ -29,6 +29,11 @@ export class RequestController {
   @Post('/shift')
   async shiftOrder(@Body() dto: ShiftOrderDto): Promise<RequestResponseDto> {
     return await this.requestService.shiftReq(dto);
+  }
+
+  @Post('/close')
+  async closeShift(@Body() dto: CloseShiftDto): Promise<RequestResponseDto> {
+    return await this.requestService.closeShift(dto);
   }
 
   @Delete(':id')

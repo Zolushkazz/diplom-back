@@ -4,6 +4,7 @@ import { EmployeeController } from './employee.controller';
 import { EmployeeService } from './employee.service';
 import { Employee } from './entities/employee.entity';
 import { JwtModule } from '@nestjs/jwt';
+import { RolesGuard } from '../auth/roles.guard';
 
 @Module({
   imports: [
@@ -13,7 +14,7 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '1h' }, // Token хугацаа
     }),
   ],
-  providers: [EmployeeService],
+  providers: [EmployeeService, RolesGuard],
   exports: [EmployeeService],
   controllers: [EmployeeController],
 })

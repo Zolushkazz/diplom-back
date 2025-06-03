@@ -5,6 +5,7 @@ import { Activities } from './entities/activities.entity';
 import { ActivitiesController } from './activities.controller';
 import { ActivitiesService } from './activities.service';
 import { JwtModule } from '@nestjs/jwt';
+import { RolesGuard } from '../auth/roles.guard';
 
 @Module({
   imports: [
@@ -14,7 +15,7 @@ import { JwtModule } from '@nestjs/jwt';
       signOptions: { expiresIn: '1h' }, // Token хугацаа
     }),
   ],
-  providers: [ActivitiesService],
+  providers: [ActivitiesService, RolesGuard],
   exports: [ActivitiesService],
   controllers: [ActivitiesController],
 })

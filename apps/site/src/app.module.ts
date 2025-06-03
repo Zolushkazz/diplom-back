@@ -10,7 +10,7 @@ import { EmployeeModule } from './employee/employee.module';
 import { Activities } from './activities/entities/activities.entity';
 import { ActivitiesModule } from './activities/activities.module';
 import { RequestModule } from './request/request.module';
-import { Request } from './request/entities/request.entity';
+import { Request, RequestShift } from './request/entities/request.entity';
 
 @Module({
   imports: [
@@ -27,7 +27,7 @@ import { Request } from './request/entities/request.entity';
         username: config.get('DB_USERNAME'),
         password: config.get('DB_PASSWORD'),
         database: config.get('DB_NAME'),
-        entities: [User, Employee, Activities, Request],
+        entities: [User, Employee, Activities, Request, RequestShift],
         // synchronize: config.get('NODE_ENV') !== 'production',
         synchronize: true,
         schema: 'site',

@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn } from 'typeorm';
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn, ManyToOne, JoinColumn, OneToMany } from 'typeorm';
 import { User } from '../../users/entities/users.entity';
 
 @Entity({schema:'site'})
@@ -15,10 +15,12 @@ export class Request {
   @Column({ nullable: true })
   notes: string;
 
-
   @ManyToOne(() => User)
-@JoinColumn({ name: 'receiverName' })
-receiver: User;
+  @JoinColumn({ name: 'receiverId' })
+  receiver: User;
+
+  @Column({ nullable: true })
+  receiverId?: number;
 
 
    @Column({ nullable: true })
@@ -31,4 +33,24 @@ receiver: User;
   updatedAt: Date;
 }
 
+@Entity({ schema: 'site' })
+export class RequestShift {
+  @PrimaryGeneratedColumn()
+  id: number;
+
+  @Column({ name: 'requestId' })
+  requestId: number;
+
+  @Column({ nullable: true })
+  state?: string;
+
+  @Column({ nullable: true })
+  note?: string;
+
+  @CreateDateColumn({ type: 'timestamp' })
+  createdAt: Date;
+
+  @UpdateDateColumn({ type: 'timestamp' })
+  updatedAt: Date;
+}
 

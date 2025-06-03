@@ -13,7 +13,7 @@ import {
   CreateRequestDto,
   RequestResponseDto,
   UpdateRequestDto,
-  ShiftOrderDto,
+  ShiftOrderDto, CloseShiftDto,
 } from './request.dto';
 import { Roles } from '../auth/roles.decorator';
 import { RolesGuard } from '../auth/roles.guard';
@@ -39,7 +39,7 @@ export class RequestController {
   @Get(':id')
   @Roles('ADMIN', 'ORGANIZER', 'PARTICIPANT')
   findOne(@Param('id') id: string) {
-    return this.requestService.findOne(+id);
+    return this.requestService.findOne(id);
   }
 
   @Put(':id')
@@ -55,6 +55,11 @@ export class RequestController {
   @Roles('ADMIN', 'ORGANIZER', 'PARTICIPANT')
   async shiftOrder(@Body() dto: ShiftOrderDto): Promise<RequestResponseDto> {
     return await this.requestService.shiftReq(dto);
+  }
+
+  @Post('/close')
+  async closeShift(@Body() dto: CloseShiftDto): Promise<RequestResponseDto> {
+    return await this.requestService.closeShift(dto);
   }
 
   @Delete(':id')
